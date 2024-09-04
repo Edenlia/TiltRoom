@@ -12,6 +12,10 @@ namespace Platformer.Mechanics
     {
         public static GameController Instance { get; private set; }
 
+        public GameObject Level1;
+        public GameObject Level2;
+        public GameObject Level3;
+
         //This model field is public and can be therefore be modified in the 
         //inspector.
         //The reference actually comes from the InstanceRegister, and is shared
@@ -23,6 +27,9 @@ namespace Platformer.Mechanics
         void OnEnable()
         {
             Instance = this;
+            
+            Level2.SetActive(false);
+            Level3.SetActive(false);
         }
 
         void OnDisable()
@@ -33,6 +40,18 @@ namespace Platformer.Mechanics
         void Update()
         {
             if (Instance == this) Simulation.Tick();
+        }
+        
+        public void LoadLevel2()
+        {
+            Level1.SetActive(false);
+            Level2.SetActive(true);
+        }
+        
+        public void LoadLevel3()
+        {
+            Level2.SetActive(false);
+            Level3.SetActive(true);
         }
     }
 }
