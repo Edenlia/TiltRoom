@@ -16,6 +16,20 @@ namespace Platformer.Mechanics
         public GameObject Level2;
         public GameObject Level3;
 
+        public AudioClip LevelSound1;
+        public AudioClip LevelSound2;
+        public AudioClip LevelSound3;
+
+        public GameObject EnemyRoot;
+        
+        public GameObject NoiseCanvas;
+        
+        private AudioClip _noiseWave;
+        private AudioSource _audioSource;
+        
+        
+        
+
         //This model field is public and can be therefore be modified in the 
         //inspector.
         //The reference actually comes from the InstanceRegister, and is shared
@@ -30,6 +44,11 @@ namespace Platformer.Mechanics
             
             Level2.SetActive(false);
             Level3.SetActive(false);
+
+            _noiseWave = Resources.Load<AudioClip>("Audio/NoiseWave");
+            _audioSource = gameObject.AddComponent<AudioSource>();
+            _audioSource.clip = LevelSound1;
+            _audioSource.Play();
         }
 
         void OnDisable()
@@ -44,6 +63,7 @@ namespace Platformer.Mechanics
         
         public void LoadLevel2()
         {
+            EnemyRoot.SetActive(true);
             Level1.SetActive(false);
             Level2.SetActive(true);
         }
@@ -52,6 +72,23 @@ namespace Platformer.Mechanics
         {
             Level2.SetActive(false);
             Level3.SetActive(true);
+        }
+
+        public void StartNoise(int ToLevel)
+        {
+            NoiseCanvas.SetActive(true);
+            _audioSource.clip = _noiseWave;
+            _audioSource.Play();
+        }
+        
+        public void StopNoise(int ToLevel)
+        {
+            NoiseCanvas.SetActive(false);
+            if (ToLevel == 2)
+                _audioSource.clip = LevelSound2;
+            else if (ToLevel == 3)
+                _audioSource.clip = LevelSound3;
+            _audioSource.Play();
         }
     }
 }

@@ -19,7 +19,21 @@ public class LevelTrigger : MonoBehaviour
                 GameController.Instance.LoadLevel2();
             else if (ToLevel == 3)
                 GameController.Instance.LoadLevel3();
+            StartCoroutine(NoiseCoroutine());
+            
+            Collider2D collider = GetComponent<Collider2D>();
+            if (collider != null)
+            {
+                collider.enabled = false;
+            }
         }
+    }
+    
+    private IEnumerator NoiseCoroutine()
+    {
+        GameController.Instance.StartNoise(ToLevel);
+        yield return new WaitForSeconds(0.3f);
+        GameController.Instance.StopNoise(ToLevel);
     }
 
     
