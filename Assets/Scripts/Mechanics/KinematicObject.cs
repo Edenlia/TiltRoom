@@ -65,6 +65,7 @@ namespace Platformer.Mechanics
         /// <param name="position"></param>
         public void Teleport(Vector3 position)
         {
+            if (body == null) return;
             body.position = position;
             velocity *= 0;
             body.velocity *= 0;
@@ -73,11 +74,13 @@ namespace Platformer.Mechanics
         protected virtual void OnEnable()
         {
             body = GetComponent<Rigidbody2D>();
+            if (body == null) return;
             body.isKinematic = true;
         }
 
         protected virtual void OnDisable()
         {
+            if (body == null) return;
             body.isKinematic = false;
         }
 
@@ -101,6 +104,8 @@ namespace Platformer.Mechanics
 
         protected virtual void FixedUpdate()
         {
+            if (body == null) return;
+            
             //if already falling, fall faster than the jump speed, otherwise use normal gravity.
             if (velocity.y < 0)
                 velocity += gravityModifier * Physics2D.gravity * Time.deltaTime;
@@ -127,6 +132,7 @@ namespace Platformer.Mechanics
 
         void PerformMovement(Vector2 move, bool yMovement)
         {
+            if (body == null) return;
             var distance = move.magnitude;
 
             if (distance > minMoveDistance)
