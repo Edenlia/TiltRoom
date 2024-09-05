@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Platformer.Core;
 using Platformer.Model;
 using UnityEngine;
@@ -19,15 +20,22 @@ namespace Platformer.Mechanics
         public AudioClip LevelSound1;
         public AudioClip LevelSound2;
         public AudioClip LevelSound3;
+        
+        public LevelTrigger LevelTrigger12;
+        public LevelTrigger LevelTrigger23;
 
         public GameObject EnemyRoot;
         
         public GameObject NoiseCanvas;
         
+        public List<GameObject> Level3RotateObjects;
+        
         private AudioClip _noiseWave;
         private AudioSource _audioSource;
         
+        private LevelEnum _currentLevel = LevelEnum.Level1;
         
+        private bool _level3Rotating = false;
         
 
         //This model field is public and can be therefore be modified in the 
@@ -38,9 +46,29 @@ namespace Platformer.Mechanics
         //conveniently configured inside the inspector.
         public PlatformerModel model = Simulation.GetModel<PlatformerModel>();
 
+        public void Restart()
+        {
+            _audioSource.clip = LevelSound1;
+            _audioSource.Play();
+    
+            Level1.SetActive(true);
+            Level2.SetActive(false);
+            Level3.SetActive(false);
+            
+            LevelTrigger12.Restart();
+            LevelTrigger23.Restart();
+            
+            EnemyRoot.SetActive(false);
+            
+            Level3RotateObjects.ForEach(obj => obj.transform.rotation = Quaternion.identity);
+            _level3Rotating = false;
+        }
+
         void OnEnable()
         {
             Instance = this;
+            
+            EnemyRoot.SetActive(false);
             
             Level2.SetActive(false);
             Level3.SetActive(false);
@@ -49,6 +77,10 @@ namespace Platformer.Mechanics
             _audioSource = gameObject.AddComponent<AudioSource>();
             _audioSource.clip = LevelSound1;
             _audioSource.Play();
+            
+            // TODO: Test, need delete
+            // LoadLevel2();
+            // LoadLevel3();
         }
 
         void OnDisable()
@@ -58,11 +90,22 @@ namespace Platformer.Mechanics
 
         void Update()
         {
+            if (_level3Rotating)
+            {
+                float delta = Time.deltaTime;
+                float angle = 0.1f * delta;
+                foreach (var obj in Level3RotateObjects)
+                {
+                    obj.transform.Rotate(0, 0, angle);
+                }
+            }
+            
             if (Instance == this) Simulation.Tick();
         }
         
         public void LoadLevel2()
         {
+            _currentLevel = LevelEnum.Level2;
             EnemyRoot.SetActive(true);
             Level1.SetActive(false);
             Level2.SetActive(true);
@@ -70,8 +113,10 @@ namespace Platformer.Mechanics
         
         public void LoadLevel3()
         {
+            _currentLevel = LevelEnum.Level3;
             Level2.SetActive(false);
             Level3.SetActive(true);
+            _level3Rotating = true;
         }
 
         public void StartNoise(int ToLevel)
@@ -89,6 +134,11 @@ namespace Platformer.Mechanics
             else if (ToLevel == 3)
                 _audioSource.clip = LevelSound3;
             _audioSource.Play();
+        }
+
+        public LevelEnum GetCurrentLevel()
+        {
+            return _currentLevel;
         }
     }
 }

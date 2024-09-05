@@ -6,6 +6,15 @@ using UnityEngine;
 public class LevelTrigger : MonoBehaviour
 {
     public int ToLevel = 2;
+
+    public void Restart()
+    {
+        Collider2D collider = GetComponent<Collider2D>();
+        if (collider != null)
+        {
+            collider.enabled = true;
+        }
+    }
     
     private void OnTriggerEnter2D(Collider2D other)
     {
