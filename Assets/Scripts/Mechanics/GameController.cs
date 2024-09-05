@@ -86,7 +86,7 @@ namespace Platformer.Mechanics
             Level3BG.SetActive(false);
 
             _noiseWave = Resources.Load<AudioClip>("Audio/NoiseWave");
-            _audioSource = gameObject.AddComponent<AudioSource>();
+            _audioSource = gameObject.GetComponent<AudioSource>();
             _audioSource.clip = LevelSound1;
             _audioSource.Play();
             
