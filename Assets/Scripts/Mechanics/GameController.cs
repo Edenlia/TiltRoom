@@ -20,6 +20,10 @@ namespace Platformer.Mechanics
         public AudioClip LevelSound1;
         public AudioClip LevelSound2;
         public AudioClip LevelSound3;
+
+        public GameObject Level1BG;
+        public GameObject Level2BG;
+        public GameObject Level3BG;
         
         public LevelTrigger LevelTrigger12;
         public LevelTrigger LevelTrigger23;
@@ -55,6 +59,10 @@ namespace Platformer.Mechanics
             Level2.SetActive(false);
             Level3.SetActive(false);
             
+            Level1BG.SetActive(true);
+            Level2BG.SetActive(false);
+            Level3BG.SetActive(false);
+            
             LevelTrigger12.Restart();
             LevelTrigger23.Restart();
             
@@ -72,6 +80,10 @@ namespace Platformer.Mechanics
             
             Level2.SetActive(false);
             Level3.SetActive(false);
+            
+            Level1BG.SetActive(true);
+            Level2BG.SetActive(false);
+            Level3BG.SetActive(false);
 
             _noiseWave = Resources.Load<AudioClip>("Audio/NoiseWave");
             _audioSource = gameObject.AddComponent<AudioSource>();
@@ -109,6 +121,8 @@ namespace Platformer.Mechanics
             EnemyRoot.SetActive(true);
             Level1.SetActive(false);
             Level2.SetActive(true);
+            Level1BG.SetActive(false);
+            Level2BG.SetActive(true);
         }
         
         public void LoadLevel3()
@@ -117,6 +131,8 @@ namespace Platformer.Mechanics
             Level2.SetActive(false);
             Level3.SetActive(true);
             _level3Rotating = true;
+            Level2BG.SetActive(false);
+            Level3BG.SetActive(true);
         }
 
         public void StartNoise(int ToLevel)
